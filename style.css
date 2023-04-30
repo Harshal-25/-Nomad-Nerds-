@@ -1,0 +1,22 @@
+.navbar-brand img{
+    display: inline-block;
+    max-width: 30%;
+    height: auto;
+    transition-delay: .1s;
+    transition-timing-function: ease-in-out;
+    transition-duration: .7s;
+    transition-property: all;
+    }
+    .carousel-inner .carousel-item img{
+        height: 50vh;
+    }
+img{
+    height: 20vh;
+    }
+.fs-1{
+    text-align: center;
+    color: indigo;
+    font-weight: 900;
+    font-size: 50vw;
+    background-color: rgb(245, 213, 232);    
+    }
