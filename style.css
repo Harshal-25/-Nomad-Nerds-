@@ -2,6 +2,8 @@
 body{
   background-color: rgb(0, 0, 0);
   color: white;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 600;
 }
 .navbar-brand img{
     display: inline-block;
@@ -53,7 +55,7 @@ h6{
 }
 
 .card-img-overlay{
-  margin-top: 120px;
+  margin-top: 10px;
   font-weight: 900;
   height: 80vh;
 }
@@ -68,9 +70,6 @@ h6{
   background-color: white;
   background-image: linear-gradient(white,rgb(16, 16, 16));
   color: white;
-}
-.nav-link a:hover{
-  color:orangered
 }
 .card{
   color: white;
