@@ -49,9 +49,13 @@ p{
 .carousel-caption{
   color: white;
 }
-
+.nav-item:hover{
+  color: brown;
+}
 h6{
   text-align: center;
+  text-decoration: underline;
+  text-decoration-color: rgb(255, 128, 0);
 }
 
 .card-img-overlay{
@@ -74,4 +78,15 @@ h6{
 .card{
   color: white;
   background-image:linear-gradient(white,black) ;
+}
+.carousel-caption{
+  color: rgb(7, 40, 40);
+}
+@media only screen and (max-width: 600px) {
+  .carousel-item{
+    margin: 22px 0;
+    /* padding: 0; */
+    width: 100%;
+    height: 65vh;
+  }
 }
