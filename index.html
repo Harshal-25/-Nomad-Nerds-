@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ysabeau&display=swap" rel="stylesheet">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
     <!-- <link href="/dist/output.css" rel="stylesheet"> -->
   </head>
   <body>
@@ -32,8 +37,7 @@
       </div>
     </header>
 
-
-    <hr>
+    <!-- <hr> -->
     <hr>
 
 
@@ -116,9 +120,14 @@
 
     <hr>
       
-    <hr>
+    <!-- <hr> -->
+
+    
 
     <p class="fs-2" data-aos="fade-up" data-aos-duration="1500">About Our Firbrigs</p>
+    <hr>
+
+    
 
     <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
       <div class="container px-5 py-24 mx-auto">
@@ -147,7 +156,7 @@
   </div> -->
 
     <hr>
-    <hr>
+    <!-- <hr> -->
     <p class="fs-2" data-aos="fade-up" data-aos-duration="1500">A Safer Community Services</p>
     <p class="fs-1" data-aos="fade-down" data-aos-duration="1500">Services We,re Offering </p>
     <hr>
@@ -266,9 +275,325 @@
         </div>
       </div>   -->
 
+      <!-- <hr> -->
+      <!-- <br> -->
+      <!-- <hr> -->
+
+      <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
+        <div class="container px-5 py-24 mx-auto">
+          <div class=" mx-auto flex flex-wrap">
+            <div id="map" class=" w-full lg:h-auto h-64 object-cover object-center rounded relative" style="padding-bottom: 40vh;">button</div>
+            <script>
+                const options = {
+                enableHighAccuracy: true, 
+                // Get high accuracy reading, if available (default false)
+                timeout: 2000, 
+                // Time to return a position successfully before error (default infinity)
+                maximumAge: 2000, 
+                // Milliseconds for which it is acceptable to use cached position (default 0)
+            };
+            
+            navigator.geolocation.watchPosition(success, error, options);
+            // Fires success function immediately and when user position changes
+            
+            function success(pos) {
+            
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                const accuracy = pos.coords.accuracy; // Accuracy in metres
+            
+            }
+            
+            function error(err) {
+            
+                if (err.code === 1) {
+                    alert("Please allow geolocation access");
+                    // Runs if user refuses access
+                } else {
+                    alert("Cannot get current location");
+                    // Runs if there was a technical problem.
+                }
+            
+            }
+            </script>
+            <script>
+              mapboxgl.accessToken = 'pk.eyJ1IjoidGVjaG5vcmF0NzUwNiIsImEiOiJjbGg4MjZvZnkwNGlmM3BwMmNwdXR2ZW00In0.kqMktlKJC5CSvgBKSM3e0Q';
+                const map = new mapboxgl.Map({
+                    container: 'map',
+                    // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+                    style: 'mapbox://styles/mapbox/dark-v11',
+                    center: [-278.5917, 22.6699],
+                    zoom: 3
+                });
+            
+                map.on('load', () => {
+                    // Add a new source from our GeoJSON data and
+                    // set the 'cluster' option to true. GL-JS will
+                    // add the point_count property to your source data.
+                    map.addSource('earthquakes', {
+                        type: 'geojson',
+                        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+                        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+                        data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
+                        cluster: true,
+                        clusterMaxZoom: 14, // Max zoom to cluster points on
+                        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+                    });
+                    map.addLayer(
+                        {
+                            'id': 'earthquakes-heat',
+                            'type': 'heatmap',
+                            'source': 'earthquakes',
+                            'maxzoom': 9,
+                            'paint': {
+                                // Increase the heatmap weight based on frequency and property magnitude
+                                'heatmap-weight': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['get', 'mag'],
+                                    0,
+                                    0,
+                                    6,
+                                    1
+                                ],
+                                // Increase the heatmap color weight weight by zoom level
+                                // heatmap-intensity is a multiplier on top of heatmap-weight
+                                'heatmap-intensity': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['zoom'],
+                                    0,
+                                    1,
+                                    9,
+                                    3
+                                ],
+                                // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                                // Begin color ramp at 0-stop with a 0-transparancy color
+                                // to create a blur-like effect.
+                                'heatmap-color': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['heatmap-density'],
+                                    0,
+                                    'rgba(33,102,172,0)',
+                                    0.2,
+                                    'rgb(103,169,207)',
+                                    0.4,
+                                    'rgb(209,229,240)',
+                                    0.6,
+                                    'rgb(253,219,199)',
+                                    0.8,
+                                    'rgb(239,138,98)',
+                                    1,
+                                    'rgb(178,24,43)'
+                                ],
+                                // Adjust the heatmap radius by zoom level
+                                'heatmap-radius': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['zoom'],
+                                    0,
+                                    2,
+                                    9,
+                                    20
+                                ],
+                                // Transition from heatmap to circle layer by zoom level
+                                'heatmap-opacity': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['zoom'],
+                                    7,
+                                    1,
+                                    9,
+                                    0
+                                ]
+                            }
+                        },
+                        'waterway-label'
+                    );
+            
+                    map.addLayer(
+                        {
+                            'id': 'earthquakes-point',
+                            'type': 'circle',
+                            'source': 'earthquakes',
+                            'minzoom': 7,
+                            'paint': {
+                                // Size circle radius by earthquake magnitude and zoom level
+                                'circle-radius': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['zoom'],
+                                    7,
+                                    ['interpolate', ['linear'], ['get', 'mag'], 1, 1, 6, 4],
+                                    16,
+                                    ['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
+                                ],
+                                // Color circle by earthquake magnitude
+                                'circle-color': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['get', 'mag'],
+                                    1,
+                                    'rgba(33,102,172,0)',
+                                    2,
+                                    'rgb(103,169,207)',
+                                    3,
+                                    'rgb(209,229,240)',
+                                    4,
+                                    'rgb(253,219,199)',
+                                    5,
+                                    'rgb(239,138,98)',
+                                    6,
+                                    'rgb(178,24,43)'
+                                ],
+                                'circle-stroke-color': 'white',
+                                'circle-stroke-width': 1,
+                                // Transition from heatmap to circle layer by zoom level
+                                'circle-opacity': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['zoom'],
+                                    7,
+                                    0,
+                                    8,
+                                    1
+                                ]
+                            }
+                        },
+                        'waterway-label'
+                    );
+                    map.addLayer({
+                        id: 'clusters',
+                        type: 'circle',
+                        source: 'earthquakes',
+                        filter: ['has', 'point_count'],
+                        paint: {
+                            // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+                            // with three steps to implement three types of circles:
+                            //   * Blue, 20px circles when point count is less than 100
+                            //   * Yellow, 30px circles when point count is between 100 and 750
+                            //   * Pink, 40px circles when point count is greater than or equal to 750
+                            'circle-color': [
+                                'step',
+                                ['get', 'point_count'],
+                                '#51bbd6',
+                                100,
+                                '#f1f075',
+                                750,
+                                '#f28cb1'
+                            ],
+                            'circle-radius': [
+                                'step',
+                                ['get', 'point_count'],
+                                20,
+                                100,
+                                30,
+                                750,
+                                40
+                            ]
+                        }
+                    });
+            
+                    map.addLayer({
+                        id: 'cluster-count',
+                        type: 'symbol',
+                        source: 'earthquakes',
+                        filter: ['has', 'point_count'],
+                        layout: {
+                            'text-field': ['get', 'point_count_abbreviated'],
+                            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                            'text-size': 12
+                        }
+                    });
+            
+                    map.addLayer({
+                        id: 'unclustered-point',
+                        type: 'circle',
+                        source: 'earthquakes',
+                        filter: ['!', ['has', 'point_count']],
+                        paint: {
+                            'circle-color': '#11b4da',
+                            'circle-radius': 4,
+                            'circle-stroke-width': 1,
+                            'circle-stroke-color': '#fff'
+                        }
+                    });
+            
+                    // inspect a cluster on click
+                    map.on('click', 'clusters', (e) => {
+                        const features = map.queryRenderedFeatures(e.point, {
+                            layers: ['clusters']
+                        });
+                        const clusterId = features[0].properties.cluster_id;
+                        map.getSource('earthquakes').getClusterExpansionZoom(
+                            clusterId,
+                            (err, zoom) => {
+                                if (err) return;
+            
+                                map.easeTo({
+                                    center: features[0].geometry.coordinates,
+                                    zoom: zoom
+                                });
+                            }
+                        );
+                    });
+            
+                    // When a click event occurs on a feature in
+                    // the unclustered-point layer, open a popup at
+                    // the location of the feature, with
+                    // description HTML from its properties.
+                    map.on('click', 'unclustered-point', (e) => {
+                        const coordinates = e.features[0].geometry.coordinates.slice();
+                        const mag = e.features[0].properties.mag;
+                        const tsunami =
+                            e.features[0].properties.tsunami === 1 ? 'yes' : 'no';
+            
+                        // Ensure that if the map is zoomed out such that
+                        // multiple copies of the feature are visible, the
+                        // popup appears over the copy being pointed to.
+                        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                        }
+            
+                        new mapboxgl.Popup()
+                            .setLngLat(coordinates)
+                            .setHTML(
+                                `Earthquake magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`
+                            )
+                            .addTo(map);
+                    });
+            
+                    map.on('mouseenter', 'clusters', () => {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+                    map.on('mouseleave', 'clusters', () => {
+                        map.getCanvas().style.cursor = '';
+                    });
+                });
+            </script>
+
+            <p class="fs-2">The Catcher in the Rye</p>
+
+            <!-- <img alt="ecommerce" class=" w-full lg:h-auto h-64 object-cover object-center rounded relative" src="images.jpeg" href="https://digvijaysinghh.github.io/Map/"> -->
+            <div class="w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0 text-center">
+              <!-- <h2 class="text-sm title-font text-gray-500 tracking-widest">BRAND NAME</h2> -->
+              <!-- <h1 class="text-white text-3xl title-font font-medium mb-1">The Catcher in the Rye</h1> -->
+              <div class="flex mb-4">
+              </div>
+              <p class="leading-relaxed">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.</p>
+              <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-800 mb-5">
+              </div>
+                <button  class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded absolute"> <a href="https://digvijaysinghh.github.io/Map/ "></a> Button</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <p class="fs-2" data-aos="fade-up" data-aos-duration="1500">Our Experience</p>
+
       <hr>
-      <br>
-      <hr>
+      
       <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
         <div class="container px-5 py-24 mx-auto">
           <div class="lg:w-4/5 mx-auto flex flex-wrap">
@@ -283,16 +608,21 @@
         </div>
       </section>
 
+      <hr>
+
+      
+
         <!-- <br> -->
 
         <!-- <hr> -->
         <hr>
-        <br>
-
+        <!-- <br> -->
+        <p class="fs-2" data-aos="fade-up" data-aos-duration="1500">Master Cleanse Reliac Heirloom</p>
+        <hr>
         <section class="text-gray-400 bg-gray-900 body-font">
           <div class="container px-5 py-24 mx-auto">
             <div class="flex flex-col text-center w-full mb-20">
-              <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white">Master Cleanse Reliac Heirloom</h1>
+              <!-- <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white">Master Cleanse Reliac Heirloom</h1> -->
               <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom.</p>
             </div>
             <div class="flex flex-wrap -m-4">
@@ -366,13 +696,16 @@
         <img src="https://smartdemowp.com/firbrigs/wp-content/uploads/2020/09/gallery-4.jpg" class="img-thumbnail" alt="...">
       </div>   -->
 
-      <br>
+      <!-- <br> -->
         <hr>
+        <!-- <hr> -->
+
+        <p class="fs-2" data-aos="fade-up" data-aos-duration="1500">Feedback</p>
+
         <hr>
 
         <section class="text-gray-400 bg-gray-900 body-font">
           <div class="container px-5 py-24 mx-auto">
-            <h1 class="text-3xl font-medium title-font text-white mb-12 text-center">Testimonials</h1>
             <div class="flex flex-wrap -m-4">
               <div class="p-4 md:w-1/2 w-full">
                 <div class="h-full bg-gray-800 bg-opacity-40 p-8 rounded">
@@ -409,11 +742,9 @@
         </section>
 
     <hr>
-    <hr>
 
     <p class="fs-2" data-aos="fade-up" data-aos-duration="1500">From the Blog </p>
     <p class="fs-1" data-aos="fade-down" data-aos-duration="1500">News & Articles </p>
-
     <hr>
         <div class="flex flex-wrap -m-4">
           <div class="p-4 lg:w-1/2">
@@ -440,34 +771,19 @@
           </div>
         </div>
     </section>
+  
   <hr>
+  <p class="fs-2">Contact Us</p>
   <hr>
-  <div id="contact us" data-aos="fade-up" data-aos-duration="1500">
-    <p class="fs-2">Contact Us</p>
+  <div id="contact_us" data-aos="fade-down" data-aos-duration="1500">
     <section class="text-gray-400 bg-gray-900 body-font relative">
-      <div class="container px-5 py-24 mx-auto flex sm:flex-nowrap flex-wrap">
-        <div class="lg:w-2/3 md:w-1/2 bg-gray-900 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
-          <iframe width="100%" height="100%" title="map" class="absolute inset-0" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.16);"></iframe>
-          <div class="bg-gray-900 relative flex flex-wrap py-6 rounded shadow-md">
-            <div class="lg:w-1/2 px-6">
-              <h2 class="title-font font-semibold text-white tracking-widest text-xs">ADDRESS</h2>
-              <p class="mt-1">Photo booth tattooed prism, portland taiyaki hoodie neutra typewriter</p>
-            </div>
-            <div class="lg:w-1/2 px-6 mt-4 lg:mt-0">
-              <h2 class="title-font font-semibold text-white tracking-widest text-xs">EMAIL</h2>
-              <a class="text-indigo-400 leading-relaxed">example@email.com</a>
-              <h2 class="title-font font-semibold text-white tracking-widest text-xs mt-4">PHONE</h2>
-              <p class="leading-relaxed">123-456-7890</p>
-            </div>
-          </div>
-        </div>
-        <div class="lg:w-1/3 md:w-1/2 flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
+      <div class="absolute inset-0 bg-gray-900">
+        <iframe title="map" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed" style="filter: grayscale(1) contrast(1.2) opacity(0.16);"></iframe>
+      </div>
+      <div class="container px-5 py-24 mx-auto flex">
+        <div class="lg:w-1/3 md:w-1/2 bg-gray-900 shadow-md rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10">
           <h2 class="text-white text-lg mb-1 font-medium title-font">Feedback</h2>
           <p class="leading-relaxed mb-5">Post-ironic portland shabby chic echo park, banjo fashion axe</p>
-          <div class="relative mb-4">
-            <label for="name" class="leading-7 text-sm text-gray-400">Name</label>
-            <input type="text" id="name" name="name" class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-          </div>
           <div class="relative mb-4">
             <label for="email" class="leading-7 text-sm text-gray-400">Email</label>
             <input type="email" id="email" name="email" class="w-full bg-gray-800 rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">

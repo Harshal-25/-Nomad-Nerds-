@@ -1,5 +1,10 @@
 *{
   scroll-behavior: auto;
+  background-color: #222831;
+}
+.nav{
+  background-color: #00adb5;
+  font-family:monospace;
 }
 body,html{
   overflow-x:hidden;
@@ -9,9 +14,11 @@ body,html{
   scroll-behavior: auto;
 }
 body{
-  background-color: rgb(28, 28, 28);
+  /* background-color: rgb(28, 28, 28); */
+  background-color: #00adb5;
   color: white;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  /* font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  font-family: 'Ysabeau', sans-serif;
   font-weight: 600;
   margin: 0;
   padding: 0;
@@ -50,10 +57,10 @@ body{
 p{
   text-align: center;
 }
-.fs-2, h5{
+/* .fs-2, h5{
   text-decoration: underline;
   text-decoration-color: rgb(255, 128, 0);
-}
+} */
 .card-title{
   padding-top: 0;
   text-align: center;
@@ -63,8 +70,8 @@ p{
 }
 h6{
   text-align: center;
-  text-decoration: underline;
-  text-decoration-color: rgb(255, 128, 0);
+  /* text-decoration: underline;
+  text-decoration-color: rgb(255, 128, 0); */
 }
 
 .card-img-overlay{
