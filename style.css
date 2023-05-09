@@ -139,6 +139,10 @@ h1,p{
   }
 }
 .articles:hover{
-  color: #1a202c;
+  color: #00adb5;
   text-decoration: underline;
+}
+.mapdetails:hover{
+  text-decoration: underline;
+  color: #00adb5;
 }
