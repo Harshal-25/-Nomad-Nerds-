@@ -1,6 +1,6 @@
 *{
   scroll-behavior: auto;
-  background-color: #222831;
+  /* background-color: #222831; */
 }
 .nav{
   background-color: #00adb5;
@@ -137,4 +137,8 @@ h1,p{
     width: 65vw;
     height: 40vh;
   }
+}
+.articles:hover{
+  color: #1a202c;
+  text-decoration: underline;
 }
